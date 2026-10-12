@@ -232,7 +232,7 @@ function initRsvp() {
     const guests = document.getElementById("guests")?.value || "1";
     const message = document.getElementById("message")?.value || "";
 
-    const text = `✨ *Confirmación Oscar Andrés* ✨\n\n*Nombre:* ${name}\n*Asistencia:* ${attendance}\n*Personas:* ${guests}\n${message ? `*Mensaje:* ${message}` : ""}`;
+    const text = `✨ *Confirmación Oscar Ortiz* ✨\n\n*Nombre:* ${name}\n*Asistencia:* ${attendance}\n*Personas:* ${guests}\n${message ? `*Mensaje:* ${message}` : ""}`;
     window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`, "_blank");
   });
 }
