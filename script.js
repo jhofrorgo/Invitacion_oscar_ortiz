@@ -1,5 +1,5 @@
 /* =========================================================
-   INVITACIÓN OSCAR ANDRÉS · 30 AÑOS
+   INVITACIÓN OSCAR ANDRÉS · 50 AÑOS
    JavaScript de Animaciones y Efectos Mágicos
    ========================================================= */
 
@@ -9,21 +9,65 @@ const WHATSAPP_PHONE = "573154246944";
 document.documentElement.classList.add("js");
 
 function startAnimations() {
+  initPersonalization(); // Función que lee la URL
   initMagicParticles();
   initMagicSparks();
   initSectionSparkles();
   initRandomSparkleBursts();
-  initVideo();
   initCountdown();
   initRevealAnimations();
-  initGallery();
   initRsvp();
+  initCalendarButton();
 }
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", startAnimations);
 } else {
   startAnimations();
+}
+
+/* ---------- PERSONALIZACIÓN POR URL ---------- */
+function initPersonalization() {
+  const params = new URLSearchParams(window.location.search);
+  
+  // Puedes usar ?invitado=Nombre o ?n=Nombre
+  const guestName = params.get("invitado") || params.get("n") || params.get("nombre");
+  
+  // Puedes usar ?cupos=2 o ?c=2
+  const guestCount = params.get("cupos") || params.get("c") || params.get("pases");
+
+  const greetingContainer = document.getElementById("personalized-greeting");
+  const nameDisplay = document.getElementById("guest-name-display");
+  const ticketsDisplay = document.getElementById("guest-tickets-display");
+
+  // Inputs del formulario RSVP para autocompletar
+  const rsvpNameInput = document.getElementById("guestName");
+  const rsvpGuestsInput = document.getElementById("guests");
+
+  if (guestName) {
+    // 1. Mostrar el nombre en el bloque VIP
+    nameDisplay.textContent = guestName;
+    
+    // 2. Pre-llenar el formulario de confirmación
+    if (rsvpNameInput) rsvpNameInput.value = guestName;
+
+    if (guestCount) {
+      const count = parseInt(guestCount, 10);
+      // 1. Mostrar los cupos con el plural correcto
+      ticketsDisplay.innerHTML = `<strong>${count}</strong> ${count === 1 ? 'pase reservado' : 'pases reservados'}`;
+      
+      // 2. Pre-llenar y limitar los campos del formulario
+      if (rsvpGuestsInput) {
+        rsvpGuestsInput.value = count;
+        rsvpGuestsInput.setAttribute("max", count);
+      }
+    } else {
+      ticketsDisplay.style.display = "none"; // Ocultar si solo pasan el nombre
+    }
+
+    // Finalmente, hacer visible el bloque en el Hero
+    greetingContainer.style.display = "block";
+  }
 }
 
 /* ---------- PARTÍCULAS DORADAS FLOTANTES ---------- */
@@ -108,26 +152,6 @@ function initRandomSparkleBursts() {
   }, 3000);
 }
 
-/* ---------- VIDEO ---------- */
-function initVideo() {
-  const video = document.getElementById("invitacionVideo");
-  const playButton = document.getElementById("videoPlayBtn");
-
-  if (!video || !playButton) return;
-
-  playButton.addEventListener("click", async () => {
-    video.muted = false;
-    try {
-      await video.play();
-      playButton.classList.add("hidden");
-    } catch (e) {
-      video.muted = true;
-      await video.play();
-      playButton.classList.add("hidden");
-    }
-  });
-}
-
 /* ---------- CUENTA REGRESIVA ---------- */
 function initCountdown() {
   const daysEl = document.getElementById("days");
@@ -151,6 +175,54 @@ function initCountdown() {
   setInterval(update, 1000);
 }
 
+/* ---------- AGREGAR AL CALENDARIO (HÍBRIDO ANDROID / IOS) ---------- */
+function initCalendarButton() {
+  const btn = document.getElementById("addToCalendarBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const isAndroid = /android/i.test(navigator.userAgent || navigator.vendor || window.opera);
+
+    if (isAndroid) {
+      const googleCalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Cumplea%C3%B1os+Oscar+Ortiz&dates=20261024T200000Z/20261025T020000Z&details=%C2%A1Est%C3%A1s+invitado+a+celebrar+mis+50+a%C3%B1os!+Te+espero+para+compartir+una+noche+incre%C3%ADble.&location=Por+confirmar";
+      window.open(googleCalUrl, '_blank');
+    } else {
+      const icsData = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//OscarOrtiz//Cumpleanos//ES",
+        "CALSCALE:GREGORIAN",
+        "BEGIN:VEVENT",
+        "SUMMARY:Cumpleaños Oscar Ortiz",
+        "DTSTART:20261024T200000Z",
+        "DTEND:20261025T020000Z",
+        "LOCATION:Por confirmar",
+        "DESCRIPTION:¡Estás invitado a celebrar mis 50 años! Te espero para compartir una noche increíble.",
+        "STATUS:CONFIRMED",
+        "SEQUENCE:0",
+        "BEGIN:VALARM",
+        "TRIGGER:-PT2H",
+        "DESCRIPTION:Recordatorio de evento",
+        "ACTION:DISPLAY",
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\r\n");
+
+      const blob = new Blob([icsData], { type: "text/calendar;charset=utf-8" });
+      const url = window.URL.createObjectURL(blob);
+      
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Cumpleanos_Oscar_Ortiz.ics";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+  });
+}
+
 /* ---------- ANIMACIONES DE ENTRADA ---------- */
 function initRevealAnimations() {
   const elements = document.querySelectorAll(".reveal");
@@ -165,52 +237,6 @@ function initRevealAnimations() {
   }, { threshold: 0.1 });
 
   elements.forEach((el) => observer.observe(el));
-}
-
-/* ---------- GALERÍA / LIGHTBOX ---------- */
-function initGallery() {
-  const visibleImages = Array.from(document.querySelectorAll(".gallery img"));
-  const hiddenImages = Array.from(document.querySelectorAll(".hidden-gallery img"));
-  const allImages = [...visibleImages, ...hiddenImages];
-
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImage = document.getElementById("lightbox-img");
-  const closeButton = document.querySelector(".lightbox-close");
-  const previousButton = document.querySelector(".lightbox-prev");
-  const nextButton = document.querySelector(".lightbox-next");
-  const openGalleryButton = document.getElementById("openGalleryBtn");
-
-  if (!lightbox || !lightboxImage || !allImages.length) return;
-
-  let currentIndex = 0;
-
-  function showImage(index) {
-    currentIndex = (index + allImages.length) % allImages.length;
-    lightboxImage.src = allImages[currentIndex].src;
-    lightboxImage.alt = allImages[currentIndex].alt;
-  }
-
-  function openLightbox(index) {
-    showImage(index);
-    lightbox.classList.add("active");
-    lightbox.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeLightbox() {
-    lightbox.classList.remove("active");
-    lightbox.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  visibleImages.forEach((image, index) => {
-    image.addEventListener("click", () => openLightbox(index));
-  });
-
-  openGalleryButton?.addEventListener("click", () => openLightbox(0));
-  closeButton?.addEventListener("click", closeLightbox);
-  previousButton?.addEventListener("click", () => showImage(currentIndex - 1));
-  nextButton?.addEventListener("click", () => showImage(currentIndex + 1));
 }
 
 /* ---------- RSVP ---------- */

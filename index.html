@@ -56,6 +56,14 @@
       <p class="eyebrow">ESTÁS INVITADO A MI</p>
       <h1>50 <span>Años</span></h1>
       <div class="gold-line"><span>✦</span></div>
+
+      <!-- NUEVO: Saludo Personalizado (Oculto por defecto) -->
+      <div id="personalized-greeting" class="personalized-greeting" style="display: none;">
+        <p class="greeting-title">INVITACIÓN ESPECIAL PARA</p>
+        <h3 id="guest-name-display">Nombre</h3>
+        <p id="guest-tickets-display" class="greeting-tickets"><strong>0</strong> pases reservados</p>
+      </div>
+
       <p class="hero-text">Será una noche increíble llena de alegría, familia y amigos muy especiales.<br><em>¡Tu presencia hará que sea inolvidable!</em></p>
       <a class="btn btn-primary" href="#evento">Descubrir la invitación <span>↓</span></a>
     </div>
@@ -148,6 +156,10 @@
           <div><span id="minutes">00</span><small>Minutos</small></div>
           <div><span id="seconds">00</span><small>Segundos</small></div>
         </div>
+        <!-- Botón Agregar al Calendario -->
+        <div class="calendar-action" style="margin-top: 40px; display: flex; justify-content: center;">
+          <button id="addToCalendarBtn" class="btn btn-calendar">📅 Agregar al Calendario</button>
+        </div>
       </div>
     </section>
 
@@ -210,13 +222,6 @@
     <p>✦ Gracias por ser parte de esta nueva historia ✦</p>
     <strong>OSCAR ORTIZ · 50 AÑOS · 24.10.2026</strong>
   </footer>
-
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <button class="lightbox-close" type="button" aria-label="Cerrar">×</button>
-    <button class="lightbox-prev" type="button" aria-label="Anterior">‹</button>
-    <img id="lightbox-img" src="" alt="">
-    <button class="lightbox-next" type="button" aria-label="Siguiente">›</button>
-  </div>
 
   <div id="rsvpModal" class="modal" aria-hidden="true">
     <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">

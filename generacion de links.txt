@@ -1,0 +1,7 @@
+Ejemplos de cómo armar el link:
+
+Para enviar a la Familia Ortiz: [tusitio.com/?invitado=Familia+Ortiz&cupos=4](https://tusitio.com/?invitado=Familia+Ortiz&cupos=4)
+
+Para enviar a Juan (sin mostrar los cupos): [tusitio.com/?invitado=Juan+Pérez](https://tusitio.com/?invitado=Juan+Pérez)
+
+Si lo mandas como siempre ([tusitio.com/](https://tusitio.com/)), no se mostrará nada raro y el diseño se mantendrá intacto.
