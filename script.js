@@ -53,10 +53,15 @@ function initPersonalization() {
 
     if (guestCount) {
       const count = parseInt(guestCount, 10);
-      // 1. Mostrar los cupos con el plural correcto
-      ticketsDisplay.innerHTML = `<strong>${count}</strong> ${count === 1 ? 'pase reservado' : 'pases reservados'}`;
       
-      // 2. Pre-llenar y limitar los campos del formulario
+      // VALIDACIÓN SINGULAR / PLURAL:
+      // Si count es exactamente 1, usa singular. De lo contrario, usa plural.
+      const textoCupo = (count === 1) ? "cupo reservado" : "cupos reservados";
+      
+      // Mostrar el texto con el número en negrita
+      ticketsDisplay.innerHTML = `<strong>${count}</strong> ${textoCupo}`;
+      
+      // Pre-llenar y limitar los campos del formulario
       if (rsvpGuestsInput) {
         rsvpGuestsInput.value = count;
         rsvpGuestsInput.setAttribute("max", count);
